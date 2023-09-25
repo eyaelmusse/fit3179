@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>  
+  
+  <!-- CSS file -->
+  <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+  
+</head>
+<body>
+  
+<div id="vis"></div>
+
+<script type="text/javascript">
+
+  // var spec2 = "week9.vg.json";
+  // vegaEmbed('#symbol_map', spec2).then(function(result) {
+  //   // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+  // }).catch(console.error);
+
+  var yourVlSpec = {
+      $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+      width: 800,
+      height: 450,
+      title: "Melbourne's Housing Markert",
+      layer: [
+        {
+          data: {
+            url: "js/vic_localities.json",
+            format: {"type": "topojson", "feature": "vic_localities"}
+          },
+          mark: {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+        },
+        {
+          data: {
+            url: "data/Melbourne_housing_FULL.csv"
+          },
+          transform: [{"filter": "datum.Longtitude > 0"}],
+          mark: {"type": "circle", "tooltip": {"content": "data"}},
+          encoding: {
+            longitude: {"field": "Longtitude", "type": "quantitative"},
+            latitude: {"field": "Lattitude", "type": "quantitative"},
+            color: {
+              field: "Price",
+              type: "quantitative",
+              title: "House Price",
+              scale: {"scheme": "reds"}
+            }
+          }
+        }
+      ]
+    };
+    vegaEmbed('#vis', yourVlSpec);
+
+  
+</script>
+
+</body>
+</html>
